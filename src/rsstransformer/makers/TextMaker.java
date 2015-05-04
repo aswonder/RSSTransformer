@@ -13,15 +13,15 @@ import java.io.PrintWriter;
  */
 public class TextMaker implements MakerInterface {
 
+    private RSSData rssData;
     private String pattern
             = "---------------------------------------\n"
-            + "<%s>\n"
-            + "[%s]\n"
-            + "%s\n"
-            + "%s\n"
-            + "%s\n"
+            + "<%s>\n" // link
+            + "[%s]\n" // title
+            + "%s\n"   // description
+            + "%s\n"   // pubDate
+            + "%s\n"   // category
             + "\n";
-    private RSSData rssData;
 
     public String getPattern() {
         return pattern;
