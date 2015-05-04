@@ -13,13 +13,27 @@ import java.io.PrintWriter;
  */
 public class TextMaker implements MakerInterface {
 
-    private static final String ITEMS_SEPARATOR = "---------------------------------------";
+    private String pattern
+            = "---------------------------------------\n"
+            + "<%s>\n"
+            + "[%s]\n"
+            + "%s\n"
+            + "%s\n"
+            + "%s\n"
+            + "\n";
     private RSSData rssData;
+
+    public String getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
 
     public TextMaker(RSSData rssData) {
         this.rssData = rssData;
     }
-
 
     @Override
     public void make(String fileName) {
@@ -34,12 +48,11 @@ public class TextMaker implements MakerInterface {
             PrintWriter out = new PrintWriter(file.getAbsoluteFile());
             try {
                 for (RSSItem item : rssData.getRSSItems()) {
-                    out.println(item.getLink());
-                    out.println(item.getTitle());
-                    out.println(item.getDescription());
-                    out.println(item.getPubDate());
-                    out.println(item.getCategory());
-                    out.println(ITEMS_SEPARATOR);
+                    out.printf(pattern, item.getLink(),
+                            item.getTitle(),
+                            item.getDescription(),
+                            item.getPubDate(),
+                            item.getCategory());
                 }
             } finally {
                 out.close();
