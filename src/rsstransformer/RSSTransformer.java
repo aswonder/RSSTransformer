@@ -11,7 +11,7 @@ public class RSSTransformer {
     public static final String LINK_3  = "http://www.vesti.ru/vesti.rss";
 
     public static void main(String[] args) throws Exception {
-        RSSLoader rss = new RSSLoader(LINK_1);
+        RSSLoader rss = new RSSLoader(LINK_2);
 
     }
 }

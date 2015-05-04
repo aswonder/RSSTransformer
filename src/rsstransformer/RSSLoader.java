@@ -13,18 +13,16 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author filin
+ * @author Andrey S. Divov
  */
 public class RSSLoader {
 
     RSSLoader(String link) {
         try {
             loadRSS(link);
-        } catch (SAXException ex) {
+        } catch (SAXException | ParserConfigurationException ex) {
             Logger.getLogger(RSSLoader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(RSSLoader.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParserConfigurationException ex) {
             Logger.getLogger(RSSLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -36,6 +34,18 @@ public class RSSLoader {
                     item(0).getChildNodes().getLength(); i++) {
                 result += el.getElementsByTagName(tag).item(0).
                         getChildNodes().item(i).getNodeValue();
+            }
+            return result.trim();
+        } else {
+            return "null";
+        }
+    }
+
+    private static String getEnclosure(Element el, String tag) {
+        if (el.getElementsByTagName(tag).getLength() > 0) {
+            String result = "";
+            for (int i = 0; i < el.getElementsByTagName(tag).getLength(); i++) {
+                result += String.valueOf(el.getElementsByTagName("enclosure").item(0).getChildNodes().item(0).getNodeValue());
             }
             return result.trim();
         } else {
@@ -66,7 +76,7 @@ public class RSSLoader {
             System.out.println(getNodeValue(itemEl, "title"));
             System.out.println(getNodeValue(itemEl, "description"));
             System.out.println(getNodeValue(itemEl, "pubDate"));
-            System.out.println(getNodeValue(channelEl, "enclosure"));
+            //System.out.println(getEnclosure(itemEl, "url"));
             System.out.println(getNodeValue(itemEl, "category"));
             System.out.println("----------------------------------------");
             System.out.println();
