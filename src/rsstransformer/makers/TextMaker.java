@@ -73,11 +73,11 @@ public class TextMaker implements MakerInterface {
         this.headerPattern = headerPattern;
     }
 
-    public String getfooterPattern() {
+    public String getFooterPattern() {
         return footerPattern;
     }
 
-    public void setfooterPattern(String footerPattern) {
+    public void setFooterPattern(String footerPattern) {
         this.footerPattern = footerPattern;
     }
 
