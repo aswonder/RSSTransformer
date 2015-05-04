@@ -14,22 +14,15 @@ import java.io.PrintWriter;
 public class TextMaker implements MakerInterface {
 
     private RSSData rssData;
-    private String pattern
-            = "---------------------------------------\n"
-            + "<%s>\n" // link
+    private String headerPattern = "";
+    private String dataPattern
+            = "<%s>\n" // link
             + "[%s]\n" // title
-            + "%s\n"   // description
-            + "%s\n"   // pubDate
-            + "%s\n"   // category
-            + "\n";
-
-    public String getPattern() {
-        return pattern;
-    }
-
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
-    }
+            + "%s\n" // description
+            + "%s\n" // pubDate
+            + "%s\n" // category
+            + "---------------------------\n\n";
+    private String footerPattern = "";
 
     public TextMaker(RSSData rssData) {
         this.rssData = rssData;
@@ -47,13 +40,15 @@ public class TextMaker implements MakerInterface {
 
             PrintWriter out = new PrintWriter(file.getAbsoluteFile());
             try {
+                out.print(headerPattern);
                 for (RSSItem item : rssData.getRSSItems()) {
-                    out.printf(pattern, item.getLink(),
+                    out.printf(dataPattern, item.getLink(),
                             item.getTitle(),
                             item.getDescription(),
                             item.getPubDate(),
                             item.getCategory());
                 }
+                out.print(footerPattern);
             } finally {
                 out.close();
             }
@@ -61,4 +56,29 @@ public class TextMaker implements MakerInterface {
             throw new RuntimeException(e);
         }
     }
+
+    public String getPattern() {
+        return dataPattern;
+    }
+
+    public void setPattern(String dataPattern) {
+        this.dataPattern = dataPattern;
+    }
+
+    public String getHeaderPattern() {
+        return headerPattern;
+    }
+
+    public void setHeaderPattern(String headerPattern) {
+        this.headerPattern = headerPattern;
+    }
+
+    public String getfooterPattern() {
+        return footerPattern;
+    }
+
+    public void setfooterPattern(String footerPattern) {
+        this.footerPattern = footerPattern;
+    }
+
 }
