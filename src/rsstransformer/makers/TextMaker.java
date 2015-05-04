@@ -57,11 +57,11 @@ public class TextMaker implements MakerInterface {
         }
     }
 
-    public String getPattern() {
+    public String getDataPattern() {
         return dataPattern;
     }
 
-    public void setPattern(String dataPattern) {
+    public void setDataPattern(String dataPattern) {
         this.dataPattern = dataPattern;
     }
 
