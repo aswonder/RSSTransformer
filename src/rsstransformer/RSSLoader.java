@@ -1,32 +1,41 @@
 package rsstransformer;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import rsstransformer.datamodel.ChannelInfo;
+import rsstransformer.datamodel.RSSItem;
+import rsstransformer.interfaces.LoadDataInterface;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- *
  * @author Andrey S. Divov
  */
-public class RSSLoader {
+public class RSSLoader implements LoadDataInterface {
 
-    RSSLoader(String link) {
-        try {
-            loadRSS(link);
-        } catch (SAXException | ParserConfigurationException ex) {
-            Logger.getLogger(RSSLoader.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(RSSLoader.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private static final String NULL_STRING = "";
+    private Document document;
+
+    RSSLoader(String link) throws IOException, SAXException, ParserConfigurationException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+        document = documentBuilder.parse(link);
     }
-    
+
+    RSSLoader(File file) throws IOException, SAXException, ParserConfigurationException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+        document = documentBuilder.parse(file);
+    }
+
     private static String getNodeValue(Element el, String tag) {
         if (el.getElementsByTagName(tag).getLength() > 0) {
             String result = "";
@@ -37,51 +46,37 @@ public class RSSLoader {
             }
             return result.trim();
         } else {
-            return "null";
+            return NULL_STRING;
         }
     }
 
-    private static String getEnclosure(Element el, String tag) {
-        if (el.getElementsByTagName(tag).getLength() > 0) {
-            String result = "";
-            for (int i = 0; i < el.getElementsByTagName(tag).getLength(); i++) {
-                result += String.valueOf(el.getElementsByTagName("enclosure").item(0).getChildNodes().item(0).getNodeValue());
-            }
-            return result.trim();
-        } else {
-            return "null";
-        }
-    }
-
-    public void loadRSS(String link) throws SAXException, IOException, ParserConfigurationException {
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-        Document document = documentBuilder.parse(link);
-        Element el = document.getDocumentElement();
+    @Override
+    public RSSData LoadData() throws ParserConfigurationException, SAXException, IOException {
+        ChannelInfo channelInfo = new ChannelInfo();
+        List<RSSItem> rssItems = new LinkedList<>();
+        RSSData rssData = new RSSData();
 
         NodeList channel = document.getElementsByTagName("channel");
         Element channelEl = (Element) channel.item(0);
-        System.out.println(getNodeValue(channelEl, "language"));
-        System.out.println(getNodeValue(channelEl, "title"));
-        System.out.println(getNodeValue(channelEl, "description"));
-        System.out.println(getNodeValue(channelEl, "link"));
 
-        System.out.println("----------------------------------------");
+        channelInfo.setLanguage(getNodeValue(channelEl, "language"));
+        channelInfo.setTitle(getNodeValue(channelEl, "title"));
+        channelInfo.setDescription(getNodeValue(channelEl, "description"));
+        channelInfo.setLink(getNodeValue(channelEl, "link"));
+
         NodeList items = document.getElementsByTagName("item");
         for (int i = 0; i < items.getLength(); i++) {
             Element itemEl = (Element) items.item(i);
-            System.out.println("----------------------------------------");
-            System.out.println(getNodeValue(itemEl, "link"));
-            System.out.println(getNodeValue(itemEl, "title"));
-            System.out.println(getNodeValue(itemEl, "description"));
-            System.out.println(getNodeValue(itemEl, "pubDate"));
-            //System.out.println(getEnclosure(itemEl, "url"));
-            System.out.println(getNodeValue(itemEl, "category"));
-            System.out.println("----------------------------------------");
-            System.out.println();
 
+            rssItems.add(new RSSItem(
+                    getNodeValue(itemEl, "link"),
+                    getNodeValue(itemEl, "title"),
+                    getNodeValue(itemEl, "description"),
+                    getNodeValue(itemEl, "pubDate"),
+                    getNodeValue(itemEl, "category")));
         }
+        rssData.setChannelInfo(channelInfo);
+        rssData.setRSSItems(rssItems);
+        return rssData;
     }
-
 }
