@@ -1,7 +1,7 @@
 package rsstransformer.datamodel;
 
 /**
- * Created by Lord on 04.05.2015.
+ * Created by Andrey S. Divov on 04.05.2015.
  */
 public class RSSItem {
 
