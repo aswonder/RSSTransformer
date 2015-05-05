@@ -84,10 +84,10 @@ public class HTMLMaker implements MakerInterface {
                     pDesc.appendChild(new Text(item.getDescription()));
 
                     P pPubDate = new P();
-                    pDesc.appendChild(new Text(item.getPubDate()));
+                    pPubDate.appendChild(new Text(item.getPubDate()));
 
                     P pCat = new P();
-                    pDesc.appendChild(new Text(item.getCategory()));
+                    pCat.appendChild(new Text(item.getCategory()));
 
                     Div divItem = new Div();
                     divItem.appendChild(link);
