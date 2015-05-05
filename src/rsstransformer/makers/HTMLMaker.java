@@ -31,31 +31,36 @@ public class HTMLMaker implements MakerInterface {
 
         File file = new File(fileName);
 
+        // Description html
         Document document = new Document(DocumentType.XHTMLTransitional);
-        document.head.appendChild(new Meta(
-                "text/html;charset=utf-8").setHttpEquiv("Content-Type"));
-        document.head.appendChild(new Title().appendChild(new Text(
-                "Complex Example Title")));
-        
-        Link style = new Link();
-        style.setRel("stylesheet");
-        style.setHref("style.css");
-        
-        document.head.appendChild(style);
-        Body body = document.body;
+        Meta charset = new Meta("text/html;charset=utf-8").setHttpEquiv("Content-Type");
+        Title htmlTitle = new Title().appendChild(new Text("RSS"));
 
-        Div channelInfoDiv = new Div();
-        channelInfoDiv.setCSSClass("channelInfo");
-        body.appendChild(channelInfoDiv);
+        Link cssSheet = new Link();
+        cssSheet.setRel("stylesheet");
+        cssSheet.setHref("style.css");
+
+        document.head.appendChild(charset);
+        document.head.appendChild(htmlTitle);
+        document.head.appendChild(cssSheet);
+        // end of Description html
+
         A linkRSS = new A();
         linkRSS.setHref(rssData.getChannelInfo().getLink());
         linkRSS.appendChild(new Text(rssData.getChannelInfo().getTitle()));
+
+        Div channelInfoDiv = new Div();
+        channelInfoDiv.setCSSClass("channelInfo");
         channelInfoDiv.appendChild(linkRSS);
+
         channelInfoDiv.appendChild(new P().
                 appendChild(new Text(rssData.getChannelInfo().getLanguage())));
 
         channelInfoDiv.appendChild(new P().
                 appendChild(new Text(rssData.getChannelInfo().getDescription())));
+
+        Body body = document.body;
+        body.appendChild(channelInfoDiv);
 
         try {
             if (!file.exists()) {
@@ -64,17 +69,27 @@ public class HTMLMaker implements MakerInterface {
 
             try (PrintWriter out = new PrintWriter(file.getAbsoluteFile())) {
                 for (RSSItem item : rssData.getRSSItems()) {
+
                     A link = new A();
                     link.setHref(item.getLink());
                     link.appendChild(new Text(item.getTitle()));
-                    body.appendChild(new Div().appendChild(link));
-                    body.appendChild(new Div().appendChild(new P().
-                            appendChild(new Text(item.getDescription()))));
-                    body.appendChild(new Div().appendChild(new P().
-                            appendChild(new Text(item.getPubDate()))));
-                    body.appendChild(new Div().appendChild(new P().
-                            appendChild(new Text(item.getCategory()))));
-                    body.appendChild(new Br());
+
+                    P pDesc = new P();
+                    pDesc.appendChild(new Text(item.getDescription()));
+
+                    P pPubDate = new P();
+                    pDesc.appendChild(new Text(item.getPubDate()));
+
+                    P pCat = new P();
+                    pDesc.appendChild(new Text(item.getCategory()));
+
+                    Div divItem = new Div();
+                    divItem.appendChild(link);
+                    divItem.appendChild(pDesc);
+                    divItem.appendChild(pPubDate);
+                    divItem.appendChild(pCat);
+
+                    body.appendChild(divItem);
                     body.appendChild(new Br());
                 }
                 out.print(document.write());
