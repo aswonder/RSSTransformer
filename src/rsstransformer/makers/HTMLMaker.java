@@ -16,7 +16,7 @@ import rsstransformer.interfaces.MakerInterface;
 
 /**
  *
- * @author Andrey S> Divov
+ * @author Andrey S. Divov
  */
 public class HTMLMaker implements MakerInterface {
 
