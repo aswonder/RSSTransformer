@@ -52,7 +52,7 @@ public class HTMLMaker implements MakerInterface {
         pLang.appendChild(new Text(rssData.getChannelInfo().getLanguage()));
 
         P pDescItem = new P();
-        pDescItem.appendChild(new Text(rssData.getChannelInfo().getLanguage()));
+        pDescItem.appendChild(new Text(rssData.getChannelInfo().getDescription()));
 
         Div channelInfoDiv = new Div();
         channelInfoDiv.setCSSClass("channelInfo");
