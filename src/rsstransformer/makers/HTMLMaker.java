@@ -29,8 +29,6 @@ public class HTMLMaker implements MakerInterface {
     @Override
     public void make(String fileName) {
 
-        File file = new File(fileName);
-
         // Description html
         Document document = new Document(DocumentType.XHTMLTransitional);
         Meta charset = new Meta("text/html;charset=utf-8").setHttpEquiv("Content-Type");
@@ -45,6 +43,7 @@ public class HTMLMaker implements MakerInterface {
         document.head.appendChild(cssSheet);
         // end of Description html
 
+        // Create DIV with info about RSS channel
         A linkRSS = new A();
         linkRSS.setHref(rssData.getChannelInfo().getLink());
         linkRSS.appendChild(new Text(rssData.getChannelInfo().getTitle()));
@@ -61,11 +60,15 @@ public class HTMLMaker implements MakerInterface {
         channelInfoDiv.appendChild(linkRSS);
         channelInfoDiv.appendChild(pLang);
         channelInfoDiv.appendChild(pDescItem);
+        // end of Create DIV with info about RSS channel
 
+        // Add DIV in body of document.
         Body body = document.body;
         body.appendChild(channelInfoDiv);
 
         try {
+            File file = new File(fileName);
+
             if (!file.exists()) {
                 file.createNewFile();
             }
