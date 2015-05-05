@@ -6,22 +6,81 @@
 package rsstransformer.makers;
 
 import rsstransformer.RSSData;
+import com.hp.gagawa.java.*;
+import com.hp.gagawa.java.elements.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import rsstransformer.datamodel.RSSItem;
+import rsstransformer.interfaces.MakerInterface;
 
 /**
  *
- * @author filin
+ * @author Andrey S> Divov
  */
-public class HTMLMaker extends TextMaker {
+public class HTMLMaker implements MakerInterface {
+
+    private RSSData rssData;
 
     public HTMLMaker(RSSData rssData) {
-        super(rssData);
-        setHeaderPattern("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 "
-                + "Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-"
-                + "strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\""
-                + " xml:lang=\"en\" lang=\"en\">\n<head>\n"
-                + "<meta http-equiv=\"content-type\" content=\"text/html; "
-                + "charset=utf-8\" /></head><body>");
-        setDataPattern("<a href=\"%s\">%s</a>\n<p>%s</p>\n<p>%s</p>\n<p>%s</p>\n<hr>");
-        setFooterPattern("</body></html>");
+        this.rssData = rssData;
+    }
+
+    @Override
+    public void make(String fileName) {
+
+        File file = new File(fileName);
+
+        Document document = new Document(DocumentType.XHTMLTransitional);
+        document.head.appendChild(new Meta(
+                "text/html;charset=utf-8").setHttpEquiv("Content-Type"));
+        document.head.appendChild(new Title().appendChild(new Text(
+                "Complex Example Title")));
+        
+        Link style = new Link();
+        style.setRel("stylesheet");
+        style.setHref("style.css");
+        
+        document.head.appendChild(style);
+        Body body = document.body;
+
+        Div channelInfoDiv = new Div();
+        channelInfoDiv.setCSSClass("channelInfo");
+        body.appendChild(channelInfoDiv);
+        A linkRSS = new A();
+        linkRSS.setHref(rssData.getChannelInfo().getLink());
+        linkRSS.appendChild(new Text(rssData.getChannelInfo().getTitle()));
+        channelInfoDiv.appendChild(linkRSS);
+        channelInfoDiv.appendChild(new P().
+                appendChild(new Text(rssData.getChannelInfo().getLanguage())));
+
+        channelInfoDiv.appendChild(new P().
+                appendChild(new Text(rssData.getChannelInfo().getDescription())));
+
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            try (PrintWriter out = new PrintWriter(file.getAbsoluteFile())) {
+                for (RSSItem item : rssData.getRSSItems()) {
+                    A link = new A();
+                    link.setHref(item.getLink());
+                    link.appendChild(new Text(item.getTitle()));
+                    body.appendChild(new Div().appendChild(link));
+                    body.appendChild(new Div().appendChild(new P().
+                            appendChild(new Text(item.getDescription()))));
+                    body.appendChild(new Div().appendChild(new P().
+                            appendChild(new Text(item.getPubDate()))));
+                    body.appendChild(new Div().appendChild(new P().
+                            appendChild(new Text(item.getCategory()))));
+                    body.appendChild(new Br());
+                    body.appendChild(new Br());
+                }
+                out.print(document.write());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

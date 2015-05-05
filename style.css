@@ -1,0 +1,22 @@
+body {background-color:white;
+font-family: Tahoma;}
+
+p {color:white;
+margin}
+
+a:link{color:red;}
+
+a:hover{color:blue;}
+
+div {background-color: #c0c0c0;
+padding:10;
+}
+
+div.channelInfo {
+    background-color: brown;
+    }
+    
+div.channelInfo p {
+    color: black;
+    }
+    
