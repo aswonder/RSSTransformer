@@ -51,7 +51,7 @@ public class RSSLoader implements LoadDataInterface {
     }
 
     @Override
-    public RSSData LoadData() throws ParserConfigurationException, SAXException, IOException {
+    public RSSData LoadData() {
         ChannelInfo channelInfo = new ChannelInfo();
         List<RSSItem> rssItems = new LinkedList<>();
         RSSData rssData = new RSSData();
