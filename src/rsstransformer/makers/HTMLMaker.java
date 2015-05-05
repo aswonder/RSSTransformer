@@ -45,19 +45,23 @@ public class HTMLMaker implements MakerInterface {
         document.head.appendChild(cssSheet);
         // end of Description html
 
+        
         A linkRSS = new A();
         linkRSS.setHref(rssData.getChannelInfo().getLink());
         linkRSS.appendChild(new Text(rssData.getChannelInfo().getTitle()));
 
+        P pLang = new P();
+        pLang.appendChild(new Text(rssData.getChannelInfo().getLanguage()));
+                
+        P pDescItem = new P();
+        pDescItem.appendChild(new Text(rssData.getChannelInfo().getLanguage()));
+        
         Div channelInfoDiv = new Div();
         channelInfoDiv.setCSSClass("channelInfo");
+        
         channelInfoDiv.appendChild(linkRSS);
-
-        channelInfoDiv.appendChild(new P().
-                appendChild(new Text(rssData.getChannelInfo().getLanguage())));
-
-        channelInfoDiv.appendChild(new P().
-                appendChild(new Text(rssData.getChannelInfo().getDescription())));
+        channelInfoDiv.appendChild(pLang);
+        channelInfoDiv.appendChild(pDescItem);
 
         Body body = document.body;
         body.appendChild(channelInfoDiv);
