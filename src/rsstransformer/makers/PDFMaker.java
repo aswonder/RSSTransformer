@@ -27,10 +27,6 @@ import rsstransformer.interfaces.MakerInterface;
 public class PDFMaker implements MakerInterface {
 
     private Paragraph paragraph;
-    private static Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-    private static Font textFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.NORMAL);
-    private static Font greenFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.NORMAL, BaseColor.GREEN);
-
     private RSSData rssData;
 
     public PDFMaker(RSSData rssData) {
@@ -42,6 +38,18 @@ public class PDFMaker implements MakerInterface {
         try {
             Document document = new Document();
 
+            BaseFont baseFont = BaseFont.
+                    createFont("fonts/NordTypefamily/Nord Medium.otf",
+                            BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+            Font titleFont = new Font(baseFont, 13, Font.BOLD);
+            Font descFont = new Font(baseFont, 11, Font.ITALIC, BaseColor.DARK_GRAY);
+            Font linkFont = new Font(baseFont, 11, Font.ITALIC, BaseColor.BLUE);
+            Font pFont = new Font(baseFont, 10);
+            Font dateFont = new Font(baseFont, 10);
+            Font catFont = new Font(baseFont, 11, Font.BOLD, BaseColor.GRAY);
+            Font sepFont = new Font(baseFont, 16);
+
             //Путь к файлу
             //Поток (стрим) для записи файла
             FileOutputStream fos = new FileOutputStream(fileName);
@@ -52,24 +60,19 @@ public class PDFMaker implements MakerInterface {
             //Открываем PDF документ для записи
             document.open();
 
-            BaseFont baseFont = BaseFont.createFont("fonts/NordTypefamily/Nord Medium.otf",
-                    BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-
-            Font linkFont = new Font(baseFont, 11);
-            linkFont.setColor(0, 0, 255); //Set Blue color
-            linkFont.setStyle(6); //Set underline italic
-
-            Font pFont = new Font(baseFont, 10);
-
-            Font dateFont = new Font(baseFont, 10);
-
-            Font catFont = new Font(baseFont, 11);
-            catFont.setColor(100, 100, 100); //Set grey color
-            catFont.setStyle(1); //set bold style
-
             //Заголовок с выравниванием по центру
-            paragraph = new Paragraph("RSS", titleFont);
+            paragraph = new Paragraph(rssData.getChannelInfo().getTitle(), titleFont);
             paragraph.setAlignment(Element.ALIGN_CENTER);
+            document.add(paragraph);
+
+            //Описание с выравниванием по правому краю
+            paragraph = new Paragraph(rssData.getChannelInfo().getDescription(), descFont);
+            paragraph.setAlignment(Element.ALIGN_RIGHT);
+            document.add(paragraph);
+
+            paragraph = new Paragraph(" ", pFont);
+            paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
+            paragraph.setFirstLineIndent(25);
             document.add(paragraph);
 
             for (RSSItem item : rssData.getRSSItems()) {
@@ -94,7 +97,7 @@ public class PDFMaker implements MakerInterface {
                 paragraph.setFirstLineIndent(25);
                 document.add(paragraph);
 
-                paragraph = new Paragraph(" ", textFont);
+                paragraph = new Paragraph(" ", sepFont);
                 paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
                 paragraph.setFirstLineIndent(25);
                 document.add(paragraph);
