@@ -38,41 +38,41 @@ public class PDFMaker implements MakerInterface {
         try {
             Document document = new Document();
 
+            //Import custom font
             BaseFont baseFont = BaseFont.
                     createFont("fonts/NordTypefamily/Nord Medium.otf",
                             BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
+            //Declare fonts
             Font titleFont = new Font(baseFont, 13, Font.BOLD);
             Font descFont = new Font(baseFont, 11, Font.ITALIC, BaseColor.DARK_GRAY);
             Font linkFont = new Font(baseFont, 11, Font.ITALIC, BaseColor.BLUE);
             Font pFont = new Font(baseFont, 10);
             Font dateFont = new Font(baseFont, 10);
-            Font catFont = new Font(baseFont, 11, Font.BOLD, new BaseColor(140,0,0));
+            Font catFont = new Font(baseFont, 11, Font.BOLD, new BaseColor(140, 0, 0));
             Font sepFont = new Font(baseFont, 16);
 
-            //Путь к файлу
-            //Поток (стрим) для записи файла
+            //Path to file
             FileOutputStream fos = new FileOutputStream(fileName);
 
             //PDF Writer
             PdfWriter.getInstance(document, fos);
 
-            //Открываем PDF документ для записи
+            //Open PDF document for write
             document.open();
 
-            //Заголовок с выравниванием по центру
+            //Add Title of channel
             paragraph = new Paragraph(rssData.getChannelInfo().getTitle(), titleFont);
             paragraph.setAlignment(Element.ALIGN_CENTER);
             document.add(paragraph);
 
-            //Описание с выравниванием по правому краю
+            //Add Desciption of channel
             paragraph = new Paragraph(rssData.getChannelInfo().getDescription(), descFont);
             paragraph.setAlignment(Element.ALIGN_RIGHT);
             document.add(paragraph);
 
+            //Add empty line
             paragraph = new Paragraph(" ", pFont);
-            paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
-            paragraph.setFirstLineIndent(25);
             document.add(paragraph);
 
             for (RSSItem item : rssData.getRSSItems()) {
@@ -82,24 +82,25 @@ public class PDFMaker implements MakerInterface {
                 link.setFont(linkFont);
                 document.add(link);
 
+                //Add Desciption of item
                 paragraph = new Paragraph(item.getDescription(), pFont);
                 paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
                 paragraph.setFirstLineIndent(25);
                 document.add(paragraph);
 
+                //Add date of publication
                 paragraph = new Paragraph(item.getPubDate(), dateFont);
                 paragraph.setAlignment(Element.ALIGN_RIGHT);
-                paragraph.setFirstLineIndent(25);
                 document.add(paragraph);
 
+                //Add category
                 paragraph = new Paragraph(item.getCategory(), catFont);
-                paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
-                paragraph.setFirstLineIndent(25);
+                paragraph.setAlignment(Element.ALIGN_RIGHT);
                 document.add(paragraph);
 
+                //Add empty line
                 paragraph = new Paragraph(" ", sepFont);
                 paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
-                paragraph.setFirstLineIndent(25);
                 document.add(paragraph);
             }
 
