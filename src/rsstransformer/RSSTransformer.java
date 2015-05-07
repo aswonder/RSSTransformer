@@ -21,7 +21,7 @@ public class RSSTransformer {
     private static final String PDF_FILE_NAME = "out.pdf";
 
     public static void main(String[] args) throws Exception {
-        LoadDataInterface rss = new RSSLoader(LINK_4);
+        LoadDataInterface rss = new RSSLoader(LINK_3);
         MakerInterface maker = new PDFMaker(rss.LoadData());
         maker.make(PDF_FILE_NAME);
     }
