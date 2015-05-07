@@ -6,20 +6,14 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Anchor;
 import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Font.FontFamily;
 
-import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfAction;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,11 +62,10 @@ public class PDFMaker implements MakerInterface {
             Font pFont = new Font(baseFont, 10);
 
             Font dateFont = new Font(baseFont, 10);
-            
+
             Font catFont = new Font(baseFont, 11);
             catFont.setColor(100, 100, 100); //Set grey color
             catFont.setStyle(1); //set bold style
-
 
             //Заголовок с выравниванием по центру
             paragraph = new Paragraph("RSS", titleFont);
