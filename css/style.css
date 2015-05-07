@@ -1,0 +1,31 @@
+body {background-color:#FFFFFF;
+font-family: Tahoma;
+padding-left: 20px;}
+
+p {
+    text-indent: 20px;
+    color:white;}
+
+a:link{color:#303030;}
+
+a:hover{color:blue;}
+
+div {background-color: #c0c0c0;
+padding:10px;
+padding-left:40px;
+}
+
+div.channelInfo {
+    background-color: brown;
+    }
+    
+    
+div.channelInfo a:link {
+    color: ffc7c7;
+    }
+    
+    
+div.channelInfo p {
+    color: black;
+    }
+    
