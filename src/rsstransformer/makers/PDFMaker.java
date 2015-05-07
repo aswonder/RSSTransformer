@@ -47,7 +47,7 @@ public class PDFMaker implements MakerInterface {
             Font linkFont = new Font(baseFont, 11, Font.ITALIC, BaseColor.BLUE);
             Font pFont = new Font(baseFont, 10);
             Font dateFont = new Font(baseFont, 10);
-            Font catFont = new Font(baseFont, 11, Font.BOLD, BaseColor.GRAY);
+            Font catFont = new Font(baseFont, 11, Font.BOLD, new BaseColor(140,0,0));
             Font sepFont = new Font(baseFont, 16);
 
             //Путь к файлу
