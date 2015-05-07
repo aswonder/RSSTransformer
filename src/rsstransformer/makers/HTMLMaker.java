@@ -36,7 +36,7 @@ public class HTMLMaker implements MakerInterface {
 
         Link cssSheet = new Link();
         cssSheet.setRel("stylesheet");
-        cssSheet.setHref("style.css");
+        cssSheet.setHref("css/style.css");
 
         document.head.appendChild(charset);
         document.head.appendChild(htmlTitle);

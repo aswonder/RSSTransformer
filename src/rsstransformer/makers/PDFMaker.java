@@ -52,7 +52,7 @@ public class PDFMaker implements MakerInterface {
             //Открываем PDF документ для записи
             document.open();
 
-            BaseFont baseFont = BaseFont.createFont("NordTypefamily/Nord Medium.otf",
+            BaseFont baseFont = BaseFont.createFont("fonts/NordTypefamily/Nord Medium.otf",
                     BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
             Font linkFont = new Font(baseFont, 11);
